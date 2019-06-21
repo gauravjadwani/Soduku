@@ -31,3 +31,20 @@
     transform: rotate(360deg);
   }
 }
+
+.TableInput{
+  align-content: center !important;
+}
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+td, th { 
+  /* padding: 6px; 
+  border: 1px solid #ccc; 
+  text-align: center;  */
+}
+input{
+  height:10px;
+  width: 10px
+}
