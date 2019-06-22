@@ -38,7 +38,16 @@
 .FlexColoumnContainer {
   display: flex;
   flex-direction: row;
-  background-color: DodgerBlue;
+  /* width: auto; */
+  
+  
+  /* width: 0px; */
+  /* height: 0px; */
+  /* background-color: DodgerBlue; */
+}
+.FlexColoumnContainer > div{
+  /* display: inline-block; */
+  /* display: inline-block; */
 }
 
 .FlexColoumnContainer > div > input {
@@ -50,10 +59,17 @@
   height: 25px;
 }
 .MainContainer{
-  margin-left: 70vh;
-  margin-top: 30vh;
+  position: absolute;
+  left:50vh;
+  top:20vh;
+  /* margin-left: 70vh; */
+  /* margin-top: 30vh; */
+  border: 2px solid black;
   /* display: flex; */
   /* flex-direction: row; */
+}
+.FlexColoumnContainer{
+  /* border: 10px solid red; */
 }
 #myText{
   /* border:none;
@@ -71,3 +87,12 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0; 
 }
+.Row-2,.Row-5{
+  border-bottom: 2px solid black;
+}
+.Coloumn-2,.Coloumn-5{
+  border-right: 2px solid black;
+}
+/* .sp{
+  border: 10px solid pink;
+} */

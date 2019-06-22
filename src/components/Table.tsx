@@ -31,8 +31,9 @@ class CustomTable extends React.Component<Props, { value: number[][] }> {
       console.log(props.i);
       const str: string = props.i + '' + j;
       const value: number = this.state.value[props.i][j];
+      const customClass: string = 'Row-' + props.i + ' ' + 'Coloumn-' + j;
       singleRowObject.push(
-        <div data-position={str}>
+        <div data-position={str} className={customClass}>
           <input
             type="number"
             onChange={e => this.handleChange(e, str)}
@@ -57,7 +58,11 @@ class CustomTable extends React.Component<Props, { value: number[][] }> {
       }
       component.push(row);
     }
-    return component;
+    return (
+      <React.Fragment>
+        <span className="sp">{component}</span>
+      </React.Fragment>
+    );
   };
   public render() {
     console.log('render', this.state.value);
