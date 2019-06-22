@@ -1,28 +1,49 @@
 import { thisExpression } from '@babel/types';
 import React from 'react';
+import { randomise } from './../utilities/helper';
 // import { NewType } from "./NewType";
 
 interface Props {}
-class CustomTable extends React.Component<Props, {}> {
-  public renderColoums = (): any => {
+class CustomTable extends React.Component<Props, { value: number[][] }> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      value: randomise(),
+    };
+  }
+  public handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    str: string,
+  ) => {
+    const newValue = e.target.value;
+    console.log('newValue', newValue, str);
+  };
+  public renderColoums = (props: any) => {
     const singleRowObject: any[] = [];
     for (let j = 0; j < 9; j++) {
+      console.log(props.i);
+      const str: string = props.i + '' + j;
+      const value: number = this.state.value[props.i][j];
       singleRowObject.push(
-        <td key={j}>
-          <input type="text" className="TableInput" />
-        </td>,
+        <div data-position={str}>
+          <input
+            type="number"
+            onChange={e => this.handleChange(e, str)}
+            value={value}
+          />
+        </div>,
       );
     }
-    return singleRowObject;
+    return <React.Fragment>{singleRowObject}</React.Fragment>;
   };
   public renderTableComponent = (): any => {
     const component: any[] = [];
     for (let i = 0; i < 9; i++) {
       const row = [];
       row.push(
-        <tr key={i}>
-          <this.renderColoums />
-        </tr>,
+        <div className="FlexColoumnContainer">
+          <this.renderColoums i={i} />
+        </div>,
       );
       {
         /* row.push(</tr>) */
@@ -32,12 +53,11 @@ class CustomTable extends React.Component<Props, {}> {
     return component;
   };
   public render() {
+    console.log('render', this.state.value);
     return (
-      <table>
-        <tbody>
-          <this.renderTableComponent />
-        </tbody>
-      </table>
+      <div className="MainContainer">
+        <this.renderTableComponent />
+      </div>
     );
   }
 }
