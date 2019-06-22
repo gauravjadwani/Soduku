@@ -16,6 +16,13 @@ class CustomTable extends React.Component<Props, { value: number[][] }> {
     str: string,
   ) => {
     const newValue = e.target.value;
+    const indexes = str.split('');
+    const newState = [...this.state.value];
+    newState[parseInt(indexes[0], 10)][parseInt(indexes[1], 10)] = parseInt(
+      newValue,
+      10,
+    );
+    this.setState({ value: newState });
     console.log('newValue', newValue, str);
   };
   public renderColoums = (props: any) => {
