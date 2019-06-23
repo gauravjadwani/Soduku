@@ -1,13 +1,24 @@
 import { array } from 'prop-types';
 
-export const randomise = (): number[][] => {
-  // let array:numbers=[][];
-
-  const matrix: number[][] = new Array(9)
-    .fill(0)
-    .map(() => new Array(9).fill(0));
+export const getRandomInt = (max: number): number => {
+  return Math.floor(Math.random() * Math.floor(max));
+};
+export const randomise = (frequency: number): any[][] => {
+  const matrix = new Array(9).fill(0).map(() => {
+    return new Array(9).fill('');
+  });
+  console.log('matrix', matrix);
+  let i = 1;
+  while (i <= frequency) {
+    const row = getRandomInt(8);
+    const coloumn = getRandomInt(8);
+    const value = getRandomInt(8);
+    matrix[row][coloumn] = value;
+    i++;
+  }
   return matrix;
 };
+
 interface StateObject {
   check: boolean;
   martrix: Array<[]>;
