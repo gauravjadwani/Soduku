@@ -19,6 +19,7 @@ exports.randomise = function () {
 //   return matrix;
 // };
 exports.sodukuState = function (matrix, insertedIndexRow, insertedIndexColoumn) {
+    var value = matrix[insertedIndexRow][insertedIndexColoumn];
     // const row: number = parseInt(insertedIndex / 10 + '', 10);
     // const coloumn: number = parseInt((insertedIndex % 10) + '', 10);
     // const str: string = (insertedIndex + '').split('');
@@ -28,9 +29,9 @@ exports.sodukuState = function (matrix, insertedIndexRow, insertedIndexColoumn) 
     var initialIndex = exports.getInitialIndex(insertedIndexRow, insertedIndexColoumn);
     var startingIndexRow = parseInt(initialIndex, 10) / 10;
     var startingIndexColoumn = parseInt(initialIndex, 10) % 10;
-    var statusSmallerGrid = exports.checkSmallerGrid(matrix, startingIndexRow, startingIndexColoumn);
-    var statusCheckRow = exports.checkRowOrColoumnStatus(matrix, startingIndexRow, startingIndexColoumn);
-    var statusCheckColoumn = exports.checkRowOrColoumnStatus(matrix, insertedIndexRow, insertedIndexColoumn, 'coloumn');
+    var statusSmallerGrid = exports.checkSmallerGrid(matrix, startingIndexRow, startingIndexColoumn, value, insertedIndexRow, insertedIndexColoumn);
+    var statusCheckRow = exports.checkRowOrColoumnStatus(matrix, startingIndexRow, startingIndexColoumn, 'row', value, insertedIndexRow, insertedIndexColoumn);
+    var statusCheckColoumn = exports.checkRowOrColoumnStatus(matrix, insertedIndexRow, insertedIndexColoumn, 'coloumn', value, insertedIndexRow, insertedIndexColoumn);
     // for (let i = 0; i < matrix.length; i++) {
     //   for (let j = 0; j < matrix[i].length; j++) {}
     // }
@@ -61,28 +62,34 @@ exports.sodukuState = function (matrix, insertedIndexRow, insertedIndexColoumn) 
 //   }
 //   return { frequency, status };
 // };
-exports.checkSmallerGrid = function (matrix, startingIndexRow, startingIndexColoumn) {
+exports.checkSmallerGrid = function (matrix, startingIndexRow, startingIndexColoumn, value, insertedIndexRow, insertedIndexColoumn) {
     var len = startingIndexRow + 3;
     var len1 = startingIndexColoumn + 3;
-    var frequency = {};
+    // const frequency: any = {};
     var status = true;
-    for (var i = startingIndexRow; i < len; i++) {
-        for (var j = startingIndexColoumn; j < len1; j++) {
-            var value = matrix[i][j];
-            if (frequency[value] !== undefined) {
-                frequency[value].count++;
-                frequency[value].positions.push(i + '' + j);
+    for (var row = startingIndexRow; row < len; row++) {
+        for (var coloumn = startingIndexColoumn; coloumn < len1; coloumn++) {
+            // const value1: any = matrix[row][coloumn];
+            if (row === insertedIndexRow && coloumn === insertedIndexColoumn) {
+                continue;
+            }
+            else if (value === matrix[row][coloumn]) {
                 status = false;
+                return { status: status, row: row, coloumn: coloumn };
             }
-            else {
-                frequency[value] = {};
-                frequency[value].count = 1;
-                frequency[value].positions = [];
-                frequency[value].positions.push(i + '' + j);
-            }
+            // if (frequency[value] !== undefined) {
+            //   frequency[value].count++;
+            //   frequency[value].positions.push(i + '' + j);
+            //   status = false;
+            // } else {
+            //   frequency[value] = {};
+            //   frequency[value].count = 1;
+            //   frequency[value].positions = [];
+            //   frequency[value].positions.push(i + '' + j);
+            // }
         }
     }
-    return { frequency: frequency, status: status };
+    return { status: status };
 };
 exports.getInitialIndex = function (insertedIndexRow, insertedIndexColoumn) {
     var initialIndex = '';
@@ -121,40 +128,54 @@ exports.getInitialIndex = function (insertedIndexRow, insertedIndexColoumn) {
     }
     return initialIndex;
 };
-exports.checkRowOrColoumnStatus = function (matrix, startingIndexRow, startingIndexColoumn, piviot) {
+exports.checkRowOrColoumnStatus = function (matrix, startingIndexRow, startingIndexColoumn, piviot, searchValue, insertedIndexRow, insertedIndexColoumn) {
     if (piviot === void 0) { piviot = 'row'; }
     var status = true;
     var frequency = {};
     for (var i = 0; i < 9; i++) {
         var value = void 0;
         if (piviot === 'row') {
+            if (i === insertedIndexColoumn) {
+                continue;
+            }
             value = matrix[startingIndexRow][i];
         }
         else {
+            if (i === insertedIndexRow) {
+                continue;
+            }
             value = matrix[i][startingIndexColoumn];
         }
-        if (value === '') {
+        if (searchValue === value) {
             status = false;
-            break;
+            if (piviot === 'row') {
+                var obj = { row: startingIndexRow, coloumn: i };
+                return { status: status, obj: obj };
+            }
+            else {
+                var obj = { row: i, coloumn: startingIndexRow };
+                return { status: status, obj: obj };
+            }
         }
-        else if (frequency[value] !== undefined) {
-            frequency[value].count++;
-            // frequency[value].positions.push(row + '' + j);
-            status = false;
-        }
-        else {
-            frequency[value] = {};
-            frequency[value].count = 1;
-            frequency[value].positions = [];
-            // frequency[value].positions.push(row + '' + j);
-        }
-        if (piviot === 'row') {
-            frequency[value].positions.push(startingIndexRow + '' + i);
-        }
-        else {
-            frequency[value].positions.push(i + '' + startingIndexColoumn);
-        }
+        // if (value === '') {
+        //   status = false;
+        //   break;
+        // } else if (frequency[value] !== undefined) {
+        //   frequency[value].count++;
+        //   // frequency[value].positions.push(row + '' + j);
+        //   status = false;
+        // } else {
+        //   frequency[value] = {};
+        //   frequency[value].count = 1;
+        //   frequency[value].positions = [];
+        //   // frequency[value].positions.push(row + '' + j);
+        // }
+        // if (piviot === 'row') {
+        //   frequency[value].positions.push(startingIndexRow + '' + i);
+        // } else {
+        //   frequency[value].positions.push(i + '' + startingIndexColoumn);
+        // }
     }
-    return { frequency: frequency, status: status };
+    return { status: status };
 };
 // sodukuState([[1, 2], [2, 8]]);

@@ -28,6 +28,7 @@ export const sodukuState = (
   insertedIndexRow: number,
   insertedIndexColoumn: number,
 ): void => {
+  const value: number = matrix[insertedIndexRow][insertedIndexColoumn];
   // const row: number = parseInt(insertedIndex / 10 + '', 10);
   // const coloumn: number = parseInt((insertedIndex % 10) + '', 10);
   // const str: string = (insertedIndex + '').split('');
@@ -44,17 +45,27 @@ export const sodukuState = (
     matrix,
     startingIndexRow,
     startingIndexColoumn,
+    value,
+    insertedIndexRow,
+    insertedIndexColoumn,
   );
   const statusCheckRow: object = checkRowOrColoumnStatus(
     matrix,
     startingIndexRow,
     startingIndexColoumn,
+    'row',
+    value,
+    insertedIndexRow,
+    insertedIndexColoumn,
   );
   const statusCheckColoumn: object = checkRowOrColoumnStatus(
     matrix,
     insertedIndexRow,
     insertedIndexColoumn,
     'coloumn',
+    value,
+    insertedIndexRow,
+    insertedIndexColoumn,
   );
   // for (let i = 0; i < matrix.length; i++) {
   //   for (let j = 0; j < matrix[i].length; j++) {}
@@ -90,27 +101,36 @@ export const checkSmallerGrid = (
   matrix: number[][],
   startingIndexRow: number,
   startingIndexColoumn: number,
+  value: number,
+  insertedIndexRow: number,
+  insertedIndexColoumn: number,
 ) => {
   const len: number = startingIndexRow + 3;
   const len1: number = startingIndexColoumn + 3;
-  const frequency: any = {};
+  // const frequency: any = {};
   let status: boolean = true;
-  for (let i = startingIndexRow; i < len; i++) {
-    for (let j = startingIndexColoumn; j < len1; j++) {
-      const value: any = matrix[i][j];
-      if (frequency[value] !== undefined) {
-        frequency[value].count++;
-        frequency[value].positions.push(i + '' + j);
+  for (let row = startingIndexRow; row < len; row++) {
+    for (let coloumn = startingIndexColoumn; coloumn < len1; coloumn++) {
+      // const value1: any = matrix[row][coloumn];
+      if (row === insertedIndexRow && coloumn === insertedIndexColoumn) {
+        continue;
+      } else if (value === matrix[row][coloumn]) {
         status = false;
-      } else {
-        frequency[value] = {};
-        frequency[value].count = 1;
-        frequency[value].positions = [];
-        frequency[value].positions.push(i + '' + j);
+        return { status, row, coloumn };
       }
+      // if (frequency[value] !== undefined) {
+      //   frequency[value].count++;
+      //   frequency[value].positions.push(i + '' + j);
+      //   status = false;
+      // } else {
+      //   frequency[value] = {};
+      //   frequency[value].count = 1;
+      //   frequency[value].positions = [];
+      //   frequency[value].positions.push(i + '' + j);
+      // }
     }
   }
-  return { frequency, status };
+  return { status };
 };
 
 export const getInitialIndex = (
@@ -150,35 +170,54 @@ export const checkRowOrColoumnStatus = (
   startingIndexRow: number,
   startingIndexColoumn: number,
   piviot: string = 'row',
+  searchValue: number,
+  insertedIndexRow: number,
+  insertedIndexColoumn: number,
 ): any => {
   let status: boolean = true;
   const frequency: any = {};
   for (let i = 0; i < 9; i++) {
     let value: any;
     if (piviot === 'row') {
+      if (i === insertedIndexColoumn) {
+        continue;
+      }
       value = matrix[startingIndexRow][i];
     } else {
+      if (i === insertedIndexRow) {
+        continue;
+      }
       value = matrix[i][startingIndexColoumn];
     }
-    if (value === '') {
+    if (searchValue === value) {
       status = false;
-      break;
-    } else if (frequency[value] !== undefined) {
-      frequency[value].count++;
-      // frequency[value].positions.push(row + '' + j);
-      status = false;
-    } else {
-      frequency[value] = {};
-      frequency[value].count = 1;
-      frequency[value].positions = [];
-      // frequency[value].positions.push(row + '' + j);
+      if (piviot === 'row') {
+        const obj = { row: startingIndexRow, coloumn: i };
+        return { status, obj };
+      } else {
+        const obj = { row: i, coloumn: startingIndexRow };
+        return { status, obj };
+      }
     }
-    if (piviot === 'row') {
-      frequency[value].positions.push(startingIndexRow + '' + i);
-    } else {
-      frequency[value].positions.push(i + '' + startingIndexColoumn);
-    }
+    // if (value === '') {
+    //   status = false;
+    //   break;
+    // } else if (frequency[value] !== undefined) {
+    //   frequency[value].count++;
+    //   // frequency[value].positions.push(row + '' + j);
+    //   status = false;
+    // } else {
+    //   frequency[value] = {};
+    //   frequency[value].count = 1;
+    //   frequency[value].positions = [];
+    //   // frequency[value].positions.push(row + '' + j);
+    // }
+    // if (piviot === 'row') {
+    //   frequency[value].positions.push(startingIndexRow + '' + i);
+    // } else {
+    //   frequency[value].positions.push(i + '' + startingIndexColoumn);
+    // }
   }
-  return { frequency, status };
+  return { status };
 };
 // sodukuState([[1, 2], [2, 8]]);
