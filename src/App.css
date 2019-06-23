@@ -87,10 +87,10 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0; 
 }
-.Row-2,.Row-5{
+div.Row-2,div.Row-5{
   border-bottom: 2px solid black;
 }
-.Coloumn-2,.Coloumn-5{
+div.Coloumn-2,div.Coloumn-5{
   border-right: 2px solid black;
 }
 /* .sp{

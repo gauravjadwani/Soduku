@@ -4,11 +4,11 @@ import { randomise } from './../utilities/helper';
 // import { NewType } from "./NewType";
 
 interface Props {}
-class CustomTable extends React.Component<Props, { value: number[][] }> {
+class CustomTable extends React.Component<Props, { value: any[][] }> {
   constructor(props: any) {
     super(props);
     this.state = {
-      value: randomise(),
+      value: randomise(40),
     };
   }
   public handleChange = (
@@ -38,6 +38,7 @@ class CustomTable extends React.Component<Props, { value: number[][] }> {
             type="number"
             onChange={e => this.handleChange(e, str)}
             value={value}
+            className={customClass}
           />
         </div>,
       );
