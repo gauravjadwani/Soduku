@@ -1,6 +1,6 @@
 import { thisExpression } from '@babel/types';
 import React from 'react';
-import { randomise } from './../utilities/helper';
+import { randomise, sodukuState } from './../utilities/helper';
 // import { NewType } from "./NewType";
 
 interface Props {}
@@ -18,11 +18,11 @@ class CustomTable extends React.Component<Props, { value: any[][] }> {
     const newValue = e.target.value;
     const indexes = str.split('');
     const newState = [...this.state.value];
-    newState[parseInt(indexes[0], 10)][parseInt(indexes[1], 10)] = parseInt(
-      newValue,
-      10,
-    );
+    const row = parseInt(indexes[0], 10);
+    const coloumn = parseInt(indexes[1], 10);
+    newState[row][coloumn] = parseInt(newValue, 10);
     this.setState({ value: newState });
+    sodukuState(newState, row, coloumn);
     console.log('newValue', newValue, str);
   };
   public renderColoums = (props: any) => {

@@ -19,9 +19,9 @@ export const randomise = (frequency: number): any[][] => {
   return matrix;
 };
 
-interface StateObject {
-  check: boolean;
-  martrix: Array<[]>;
+interface InitialIndexObject {
+  row: number;
+  coloumn: number;
 }
 // export const sodukuState = (matrix: number[][]): object => {
 //   for (let i = 0; i < matrix.length; i++) {
@@ -40,18 +40,13 @@ export const sodukuState = (
   insertedIndexColoumn: number,
 ): void => {
   const value: number = matrix[insertedIndexRow][insertedIndexColoumn];
-  // const row: number = parseInt(insertedIndex / 10 + '', 10);
-  // const coloumn: number = parseInt((insertedIndex % 10) + '', 10);
-  // const str: string = (insertedIndex + '').split('');
-  // const i: number = parseInt(str[0], 10);
-  // const j: number = parseInt(str[1], 10);
   const containerArray: number[][] = [];
-  const initialIndex: string = getInitialIndex(
+  const initialIndex: InitialIndexObject = getInitialIndex(
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  const startingIndexRow: number = parseInt(initialIndex, 10) / 10;
-  const startingIndexColoumn: number = parseInt(initialIndex, 10) % 10;
+  const startingIndexRow: number = initialIndex.row;
+  const startingIndexColoumn: number = initialIndex.coloumn;
   const statusSmallerGrid: object = checkSmallerGrid(
     matrix,
     startingIndexRow,
@@ -78,6 +73,7 @@ export const sodukuState = (
     insertedIndexRow,
     insertedIndexColoumn,
   );
+  console.log('statusSmallerGrid', statusSmallerGrid);
   // for (let i = 0; i < matrix.length; i++) {
   //   for (let j = 0; j < matrix[i].length; j++) {}
   // }
@@ -118,6 +114,15 @@ export const checkSmallerGrid = (
 ) => {
   const len: number = startingIndexRow + 3;
   const len1: number = startingIndexColoumn + 3;
+  console.log(
+    'hehehehhe',
+    matrix,
+    startingIndexRow,
+    startingIndexColoumn,
+    value,
+    insertedIndexRow,
+    insertedIndexColoumn,
+  );
   // const frequency: any = {};
   let status: boolean = true;
   for (let row = startingIndexRow; row < len; row++) {
@@ -147,31 +152,31 @@ export const checkSmallerGrid = (
 export const getInitialIndex = (
   insertedIndexRow: number,
   insertedIndexColoumn: number,
-): string => {
-  let initialIndex: string = '';
+): InitialIndexObject => {
+  let initialIndex: InitialIndexObject;
   if (insertedIndexRow < 3) {
     if (insertedIndexColoumn < 3) {
-      initialIndex = '00';
+      initialIndex = { row: 0, coloumn: 0 };
     } else if (insertedIndexColoumn > 2 && insertedIndexColoumn < 6) {
-      initialIndex = '03';
+      initialIndex = { row: 0, coloumn: 3 };
     } else {
-      initialIndex = '06';
+      initialIndex = { row: 0, coloumn: 6 };
     }
   } else if (insertedIndexRow > 2 && insertedIndexRow < 6) {
     if (insertedIndexColoumn < 3) {
-      initialIndex = '30';
+      initialIndex = { row: 3, coloumn: 0 };
     } else if (insertedIndexColoumn > 2 && insertedIndexColoumn < 6) {
-      initialIndex = '33';
+      initialIndex = { row: 3, coloumn: 3 };
     } else {
-      initialIndex = '36';
+      initialIndex = { row: 3, coloumn: 6 };
     }
   } else {
     if (insertedIndexColoumn < 3) {
-      initialIndex = '60';
+      initialIndex = { row: 6, coloumn: 0 };
     } else if (insertedIndexColoumn > 2 && insertedIndexColoumn < 6) {
-      initialIndex = '63';
+      initialIndex = { row: 6, coloumn: 3 };
     } else {
-      initialIndex = '66';
+      initialIndex = { row: 6, coloumn: 6 };
     }
   }
   return initialIndex;
