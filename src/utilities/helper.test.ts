@@ -37,25 +37,25 @@ const initialIndex: string = getInitialIndex(insertedRow, insertedColoumn);
 const value = matrix[insertedRow][insertedColoumn];
 const startingIndexRow: number = parseInt(initialIndex, 10) / 10;
 const startingIndexColoumn: number = parseInt(initialIndex, 10) % 10;
-const statusSmallerGrid: object = checkSmallerGrid(
-  matrix,
-  startingIndexRow,
-  startingIndexColoumn,
-  value,
-  insertedRow,
-  insertedColoumn,
-);
-console.log('statusSmallerGrid', statusSmallerGrid);
-const statusCheckRow: object = checkRowOrColoumnStatus(
-  matrix,
-  startingIndexRow,
-  startingIndexColoumn,
-  'row',
-  value,
-  insertedRow,
-  insertedColoumn,
-);
-console.log('statusCheckRow', statusCheckRow);
+// const statusSmallerGrid: object = checkSmallerGrid(
+//   matrix,
+//   startingIndexRow,
+//   startingIndexColoumn,
+//   value,
+//   insertedRow,
+//   insertedColoumn,
+// );
+// console.log('statusSmallerGrid', statusSmallerGrid);
+// const statusCheckRow: object = checkRowOrColoumnStatus(
+//   matrix,
+//   startingIndexRow,
+//   startingIndexColoumn,
+//   'row',
+//   value,
+//   insertedRow,
+//   insertedColoumn,
+// );
+// console.log('statusCheckRow', statusCheckRow);
 const statusCheckColoumn: object = checkRowOrColoumnStatus(
   matrix,
   0,

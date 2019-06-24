@@ -23,6 +23,11 @@ interface InitialIndexObject {
   row: number;
   coloumn: number;
 }
+interface SodukuStateObject {
+  status: number;
+  row: number;
+  coloumn: number;
+}
 // export const sodukuState = (matrix: number[][]): object => {
 //   for (let i = 0; i < matrix.length; i++) {
 //     for (let j = 0; j < matrix[i].length; j++) {}
@@ -38,7 +43,7 @@ export const sodukuState = (
   matrix: number[][],
   insertedIndexRow: number,
   insertedIndexColoumn: number,
-): void => {
+): any => {
   const value: number = matrix[insertedIndexRow][insertedIndexColoumn];
   const containerArray: number[][] = [];
   const initialIndex: InitialIndexObject = getInitialIndex(
@@ -47,7 +52,7 @@ export const sodukuState = (
   );
   const startingIndexRow: number = initialIndex.row;
   const startingIndexColoumn: number = initialIndex.coloumn;
-  const statusSmallerGrid: object = checkSmallerGrid(
+  const statusSmallerGrid: any = checkSmallerGrid(
     matrix,
     startingIndexRow,
     startingIndexColoumn,
@@ -55,7 +60,11 @@ export const sodukuState = (
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  const statusCheckRow: object = checkRowOrColoumnStatus(
+  console.log('fff-statusSmallerGrid', statusSmallerGrid);
+  if (statusSmallerGrid.status === false) {
+    return { ...statusSmallerGrid };
+  }
+  const statusCheckRow: any = checkRowOrColoumnStatus(
     matrix,
     startingIndexRow,
     startingIndexColoumn,
@@ -64,16 +73,28 @@ export const sodukuState = (
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  const statusCheckColoumn: object = checkRowOrColoumnStatus(
+  console.log('fff-statusCheckRow', statusCheckRow);
+  if (statusCheckRow.status === false) {
+    return { ...statusCheckRow };
+  }
+  const statusCheckColoumn: any = checkRowOrColoumnStatus(
     matrix,
-    insertedIndexRow,
-    insertedIndexColoumn,
+    startingIndexRow,
+    startingIndexColoumn,
     'coloumn',
     value,
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  console.log('statusSmallerGrid', statusSmallerGrid);
+  console.log('fff-statusCheckColoumn', statusCheckColoumn);
+  if (statusCheckColoumn.status === false) {
+    return { ...statusCheckColoumn };
+  } else {
+    return { status: true };
+  }
+  // return statusCheckColoumn;
+  // console.log('statusSmallerGrid', statusSmallerGrid);
+  // console.log('statusCheckRow', statusCheckRow);
   // for (let i = 0; i < matrix.length; i++) {
   //   for (let j = 0; j < matrix[i].length; j++) {}
   // }
@@ -192,27 +213,29 @@ export const checkRowOrColoumnStatus = (
 ): any => {
   let status: boolean = true;
   const frequency: any = {};
+
   for (let i = 0; i < 9; i++) {
     let value: any;
     if (piviot === 'row') {
       if (i === insertedIndexColoumn) {
         continue;
       }
-      value = matrix[startingIndexRow][i];
+      value = matrix[insertedIndexRow][i];
     } else {
       if (i === insertedIndexRow) {
         continue;
       }
-      value = matrix[i][startingIndexColoumn];
+      console.log('ffff', insertedIndexColoumn);
+      value = matrix[i][insertedIndexColoumn];
     }
     if (searchValue === value) {
       status = false;
       if (piviot === 'row') {
-        const obj = { row: startingIndexRow, coloumn: i };
-        return { status, obj };
+        const obj = { row: insertedIndexRow, coloumn: i };
+        return { status, ...obj };
       } else {
-        const obj = { row: i, coloumn: startingIndexRow };
-        return { status, obj };
+        const obj = { row: i, coloumn: insertedIndexColoumn };
+        return { status, ...obj };
       }
     }
     // if (value === '') {

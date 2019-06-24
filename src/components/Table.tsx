@@ -4,10 +4,14 @@ import { randomise, sodukuState } from './../utilities/helper';
 // import { NewType } from "./NewType";
 
 interface Props {}
-class CustomTable extends React.Component<Props, { value: any[][] }> {
+class CustomTable extends React.Component<
+  Props,
+  { value: any[][]; error: string }
+> {
   constructor(props: any) {
     super(props);
     this.state = {
+      error: '',
       value: randomise(40),
     };
   }
@@ -22,7 +26,13 @@ class CustomTable extends React.Component<Props, { value: any[][] }> {
     const coloumn = parseInt(indexes[1], 10);
     newState[row][coloumn] = parseInt(newValue, 10);
     this.setState({ value: newState });
-    sodukuState(newState, row, coloumn);
+    const sodukuStatusObject: any = sodukuState(newState, row, coloumn);
+    console.log('handleChange', sodukuStatusObject);
+    if (sodukuStatusObject.status === false) {
+      const postions = sodukuStatusObject.row + '' + sodukuStatusObject.coloumn;
+      this.setState({ error: postions });
+    }
+    // this.setState({ error: newState });
     console.log('newValue', newValue, str);
   };
   public renderColoums = (props: any) => {
@@ -32,13 +42,17 @@ class CustomTable extends React.Component<Props, { value: any[][] }> {
       const str: string = props.i + '' + j;
       const value: number = this.state.value[props.i][j];
       const customClass: string = 'Row-' + props.i + ' ' + 'Coloumn-' + j;
+      const error: string = this.state.error;
+      const rowcouloumn = error.split('');
+      const row = parseInt(rowcouloumn[0], 10);
+      const coloumn = parseInt(rowcouloumn[1], 10);
       singleRowObject.push(
         <div data-position={str} className={customClass}>
           <input
             type="number"
             onChange={e => this.handleChange(e, str)}
             value={value}
-            className={customClass}
+            className={row === props.i && coloumn === j ? 'Red' : ''}
           />
         </div>,
       );

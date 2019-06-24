@@ -93,6 +93,9 @@ div.Row-2,div.Row-5{
 div.Coloumn-2,div.Coloumn-5{
   border-right: 2px solid black;
 }
+.Red{
+  border: 2px solid red;
+}
 /* .sp{
   border: 10px solid pink;
 } */
