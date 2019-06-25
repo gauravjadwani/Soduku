@@ -1,20 +1,32 @@
 import { thisExpression } from '@babel/types';
 import React from 'react';
-import { randomise, sodukuState } from './../utilities/helper';
+import { getSodukuTime, randomise, sodukuState } from './../utilities/helper';
 // import { NewType } from "./NewType";
 
 interface Props {}
 class CustomTable extends React.Component<
   Props,
-  { value: any[][]; error: string }
+  { value: any[][]; error: string; time: string; locked: boolean }
 > {
   constructor(props: any) {
     super(props);
     this.state = {
       error: '',
+      time: '00:00:00',
       value: randomise(40),
+      locked: false,
     };
   }
+  public startTimer = (st: number) => {
+    const t: string = getSodukuTime(st);
+    this.setState({ time: t });
+  };
+  public componentDidMount = () => {
+    // this.setState({ startTime: new Date() });
+    const startTime: number = new Date().getTime();
+    const tInterval = setInterval(() => this.startTimer(startTime), 1000);
+  };
+
   public handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     str: string,
@@ -26,11 +38,14 @@ class CustomTable extends React.Component<
     const coloumn = parseInt(indexes[1], 10);
     newState[row][coloumn] = parseInt(newValue, 10);
     this.setState({ value: newState });
+
     const sodukuStatusObject: any = sodukuState(newState, row, coloumn);
     console.log('handleChange', sodukuStatusObject);
     if (sodukuStatusObject.status === false) {
       const postions = sodukuStatusObject.row + '' + sodukuStatusObject.coloumn;
       this.setState({ error: postions });
+    } else {
+      this.setState({ error: '' });
     }
     // this.setState({ error: newState });
     console.log('newValue', newValue, str);
@@ -82,8 +97,11 @@ class CustomTable extends React.Component<
   public render() {
     console.log('render', this.state.value);
     return (
-      <div className="MainContainer">
-        <this.renderTableComponent />
+      <div>
+        <div className="MainContainer">
+          <this.renderTableComponent />
+        </div>
+        <div>TIme : {this.state.time}</div>
       </div>
     );
   }

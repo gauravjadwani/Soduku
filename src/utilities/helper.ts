@@ -7,14 +7,27 @@ export const randomise = (frequency: number): any[][] => {
   const matrix = new Array(9).fill(0).map(() => {
     return new Array(9).fill('');
   });
+  // let temp: any;
+  // return matrix;
   console.log('matrix', matrix);
-  let i = 1;
-  while (i <= frequency) {
+  // const i = 1;
+  // while (i <= frequency) {
+  for (let i = 1; i <= frequency; i++) {
     const row = getRandomInt(8);
     const coloumn = getRandomInt(8);
     const value = getRandomInt(8);
     matrix[row][coloumn] = value;
-    i++;
+    // const temp: any[][] = [...matrix];
+    // temp = Object.assign([], matrix);
+    // temp[row][coloumn] = value;
+    const checkState: any = sodukuState(matrix, row, coloumn);
+    console.log('checkStateinsertion', row, coloumn, value);
+    if (checkState.status === false) {
+      if (matrix[row][coloumn] !== '') {
+        matrix[row][coloumn] = '';
+      }
+    }
+    // matrix[row][coloumn] = value;
   }
   return matrix;
 };
@@ -260,3 +273,34 @@ export const checkRowOrColoumnStatus = (
   return { status };
 };
 // sodukuState([[1, 2], [2, 8]]);
+export const getSodukuTime = (startTime: number): string => {
+  let updatedTime: number;
+  let difference: number;
+  updatedTime = new Date().getTime();
+  difference = updatedTime - startTime;
+  // if (savedTime) {
+  //   difference = updatedTime - startTime + savedTime;
+  // } else {
+  //   difference = updatedTime - startTime;
+  // }
+  // var days = Math.floor(difference / (1000 * 60 * 60 * 24));
+  let hours: any = Math.floor(
+    (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+  );
+  let minutes: any = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds: any = Math.floor((difference % (1000 * 60)) / 1000);
+  // let milliseconds: any = Math.floor((difference % (1000 * 60)) / 100);
+  hours = hours < 10 ? '0' + hours : hours;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+  // milliseconds =
+  //   milliseconds < 100
+  //     ? milliseconds < 10
+  //       ? '00' + milliseconds
+  //       : '0' + milliseconds
+  //     : milliseconds;
+  const displayTime: string = hours + ':' + minutes + ':' + seconds;
+  console.log(displayTime);
+  return displayTime;
+  // timerDisplay.innerHTML = hours + ':' + minutes + ':' + seconds + ':' + milliseconds;
+};
