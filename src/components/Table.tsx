@@ -67,7 +67,12 @@ class CustomTable extends React.Component<
   ) => {
     const newValue: string = e.target.value;
     // console.log('newValue', newValue, TEST_STRING.test(parseInt(newValue,10));
-    if (newValue === '' || TEST_STRING.test(newValue)) {
+    console.log('iiiifffhandleChange');
+    if (
+      newValue === '' ||
+      (TEST_STRING.test(newValue) && newValue.length === 1)
+    ) {
+      console.log('iiiifff', newValue);
       // newValue = parseInt(e.target.value, 10);
       const indexes = str.split('');
       const newState = [...this.state.value];
@@ -93,6 +98,9 @@ class CustomTable extends React.Component<
       }
       // this.setState({ error: newState });
       console.log('newValue', newValue, str);
+    } else {
+      console.log('iiiifffelse', newValue);
+      // e.target.value = '';
     }
   };
   public renderColoums = (props: any) => {
