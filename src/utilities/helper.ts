@@ -75,7 +75,7 @@ export const sodukuState = (
   );
   console.log('fff-statusSmallerGrid', statusSmallerGrid);
   if (statusSmallerGrid.status === false) {
-    return { ...statusSmallerGrid };
+    return { ...statusSmallerGrid, completed: false };
   }
   const statusCheckRow: any = checkRowOrColoumnStatus(
     matrix,
@@ -88,7 +88,7 @@ export const sodukuState = (
   );
   console.log('fff-statusCheckRow', statusCheckRow);
   if (statusCheckRow.status === false) {
-    return { ...statusCheckRow };
+    return { ...statusCheckRow, completed: false };
   }
   const statusCheckColoumn: any = checkRowOrColoumnStatus(
     matrix,
@@ -100,44 +100,18 @@ export const sodukuState = (
     insertedIndexColoumn,
   );
   console.log('fff-statusCheckColoumn', statusCheckColoumn);
+
   if (statusCheckColoumn.status === false) {
-    return { ...statusCheckColoumn };
+    return { ...statusCheckColoumn, completed: false };
   } else {
-    return { status: true };
+    const statusSearchMatrix: any = searchMatrix(matrix, '');
+    if (statusSearchMatrix.status === false) {
+      return { status: true, completed: true };
+    }
+    return { status: true, completed: false };
+    console.log('fff-statusCompleted', matrix, value, statusSearchMatrix);
   }
-  // return statusCheckColoumn;
-  // console.log('statusSmallerGrid', statusSmallerGrid);
-  // console.log('statusCheckRow', statusCheckRow);
-  // for (let i = 0; i < matrix.length; i++) {
-  //   for (let j = 0; j < matrix[i].length; j++) {}
-  // }
 };
-// export const checkHorizontalAndVerticalStatus = (
-//   matrix: number[][],
-//   row: number,
-//   coloumn: number,
-// ): object => {
-//   const frequency: any = {};
-//   let status: boolean = true;
-//   for (let j = 0; j < 9; j++) {
-//     const value: any = matrix[row][j].toString();
-//     if (value === '') {
-//       status = false;
-//       break;
-//     } else if (frequency.hasOwnProperty(value)) {
-//       const str: string = frequency[value];
-//       frequency.value.count++;
-//       frequency[value].positions.push(row + '' + j);
-//       status = false;
-//     } else {
-//       frequency[value] = {};
-//       frequency[value].count = 1;
-//       frequency[value].positions = [];
-//       frequency[value].positions.push(row + '' + j);
-//     }
-//   }
-//   return { frequency, status };
-// };
 export const checkSmallerGrid = (
   matrix: number[][],
   startingIndexRow: number,
@@ -225,6 +199,7 @@ export const checkRowOrColoumnStatus = (
   insertedIndexColoumn: number,
 ): any => {
   let status: boolean = true;
+  const statusCompleted: boolean = false;
   const frequency: any = {};
 
   for (let i = 0; i < 9; i++) {
@@ -251,24 +226,6 @@ export const checkRowOrColoumnStatus = (
         return { status, ...obj };
       }
     }
-    // if (value === '') {
-    //   status = false;
-    //   break;
-    // } else if (frequency[value] !== undefined) {
-    //   frequency[value].count++;
-    //   // frequency[value].positions.push(row + '' + j);
-    //   status = false;
-    // } else {
-    //   frequency[value] = {};
-    //   frequency[value].count = 1;
-    //   frequency[value].positions = [];
-    //   // frequency[value].positions.push(row + '' + j);
-    // }
-    // if (piviot === 'row') {
-    //   frequency[value].positions.push(startingIndexRow + '' + i);
-    // } else {
-    //   frequency[value].positions.push(i + '' + startingIndexColoumn);
-    // }
   }
   return { status };
 };
@@ -303,4 +260,18 @@ export const getSodukuTime = (startTime: number): string => {
   console.log(displayTime);
   return displayTime;
   // timerDisplay.innerHTML = hours + ':' + minutes + ':' + seconds + ':' + milliseconds;
+};
+export const searchMatrix = (matrix: number[][], element: any) => {
+  let status: boolean = false;
+  // tslint:disable-next-line:prefer-for-of
+  for (let row: number = 0; row < matrix.length; row++) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let coloumn: number = 0; coloumn < matrix[row].length; coloumn++) {
+      if (matrix[row][coloumn] === element) {
+        status = true;
+        return status;
+      }
+    }
+  }
+  return status;
 };

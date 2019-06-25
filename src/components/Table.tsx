@@ -3,18 +3,35 @@ import React from 'react';
 import { getSodukuTime, randomise, sodukuState } from './../utilities/helper';
 // import { NewType } from "./NewType";
 
-interface Props {}
+// // interface Props {}
+// declare global {
+//   // namespace JSX {
+//   //   interface IntrinsicElements {
+//   //     input: React.DetailedHTMLProps<
+//   //       React.HTMLAttributes<HTMLElement>,
+//   //       HTMLElement
+//   //     >;
+//   //   }
+//   // }
+// }
 class CustomTable extends React.Component<
-  Props,
-  { value: any[][]; error: string; time: string; locked: boolean }
+  any,
+  {
+    value: any[][];
+    error: string;
+    time: string;
+    message: string;
+    chancesRemaining: number;
+  }
 > {
   constructor(props: any) {
     super(props);
     this.state = {
+      chancesRemaining: 3,
       error: '',
+      message: '',
       time: '00:00:00',
       value: randomise(40),
-      locked: false,
     };
   }
   public startTimer = (st: number) => {
@@ -24,9 +41,19 @@ class CustomTable extends React.Component<
   public componentDidMount = () => {
     // this.setState({ startTime: new Date() });
     const startTime: number = new Date().getTime();
-    const tInterval = setInterval(() => this.startTimer(startTime), 1000);
+    // const tInterval = setInterval(() => this.startTimer(startTime), 1000);
   };
-
+  public onKeyDown(e: any) {
+    console.log('what', e.keyCode);
+    if (
+      e.keyCode === 8 &&
+      this.state.error !== '' &&
+      this.state.chancesRemaining > 0
+    ) {
+      const chancesRemaining: number = this.state.chancesRemaining - 1;
+      this.setState({ chancesRemaining });
+    }
+  }
   public handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     str: string,
@@ -40,10 +67,15 @@ class CustomTable extends React.Component<
     this.setState({ value: newState });
 
     const sodukuStatusObject: any = sodukuState(newState, row, coloumn);
-    console.log('handleChange', sodukuStatusObject);
+    console.log('handleChange', sodukuStatusObject, newState);
     if (sodukuStatusObject.status === false) {
       const postions = sodukuStatusObject.row + '' + sodukuStatusObject.coloumn;
       this.setState({ error: postions });
+    } else if (
+      sodukuStatusObject.status === false &&
+      sodukuStatusObject.completed === true
+    ) {
+      this.setState({ error: '' });
     } else {
       this.setState({ error: '' });
     }
@@ -66,8 +98,10 @@ class CustomTable extends React.Component<
           <input
             type="number"
             onChange={e => this.handleChange(e, str)}
+            onKeyDown={e => this.onKeyDown(e)}
             value={value}
             className={row === props.i && coloumn === j ? 'Red' : ''}
+            readOnly={this.state.chancesRemaining > 0 ? false : true}
           />
         </div>,
       );
@@ -102,6 +136,10 @@ class CustomTable extends React.Component<
           <this.renderTableComponent />
         </div>
         <div>TIme : {this.state.time}</div>
+        <div>Chances remaining : {this.state.chancesRemaining}</div>
+        <div>
+          Status : {this.state.chancesRemaining > 0 ? 'playing' : 'Game over'}
+        </div>
       </div>
     );
   }
