@@ -1,5 +1,6 @@
-import { thisExpression } from '@babel/types';
+// import { thisExpression } from '@babel/types';
 import React from 'react';
+import { TEST_STRING } from './../utilities/constants';
 import { getSodukuTime, randomise, sodukuState } from './../utilities/helper';
 // import { NewType } from "./NewType";
 
@@ -22,6 +23,7 @@ class CustomTable extends React.Component<
     time: string;
     message: string;
     chancesRemaining: number;
+    tInterval: number;
   }
 > {
   constructor(props: any) {
@@ -30,6 +32,7 @@ class CustomTable extends React.Component<
       chancesRemaining: 3,
       error: '',
       message: '',
+      tInterval: 0,
       time: '00:00:00',
       value: randomise(40),
     };
@@ -41,7 +44,11 @@ class CustomTable extends React.Component<
   public componentDidMount = () => {
     // this.setState({ startTime: new Date() });
     const startTime: number = new Date().getTime();
-    // const tInterval = setInterval(() => this.startTimer(startTime), 1000);
+    // type NewType = Time;
+
+    const tInterval: any = setInterval(() => this.startTimer(startTime), 1000);
+    // console.log('tInterval', typeof tInterval);
+    this.setState({ tInterval });
   };
   public onKeyDown(e: any) {
     console.log('what', e.keyCode);
@@ -58,29 +65,35 @@ class CustomTable extends React.Component<
     e: React.ChangeEvent<HTMLInputElement>,
     str: string,
   ) => {
-    const newValue = e.target.value;
-    const indexes = str.split('');
-    const newState = [...this.state.value];
-    const row = parseInt(indexes[0], 10);
-    const coloumn = parseInt(indexes[1], 10);
-    newState[row][coloumn] = parseInt(newValue, 10);
-    this.setState({ value: newState });
+    const newValue: string = e.target.value;
+    // console.log('newValue', newValue, TEST_STRING.test(parseInt(newValue,10));
+    if (newValue === '' || TEST_STRING.test(newValue)) {
+      // newValue = parseInt(e.target.value, 10);
+      const indexes = str.split('');
+      const newState = [...this.state.value];
+      const row = parseInt(indexes[0], 10);
+      const coloumn = parseInt(indexes[1], 10);
+      newState[row][coloumn] = parseInt(e.target.value, 10);
+      this.setState({ value: newState });
 
-    const sodukuStatusObject: any = sodukuState(newState, row, coloumn);
-    console.log('handleChange', sodukuStatusObject, newState);
-    if (sodukuStatusObject.status === false) {
-      const postions = sodukuStatusObject.row + '' + sodukuStatusObject.coloumn;
-      this.setState({ error: postions });
-    } else if (
-      sodukuStatusObject.status === false &&
-      sodukuStatusObject.completed === true
-    ) {
-      this.setState({ error: '' });
-    } else {
-      this.setState({ error: '' });
+      const sodukuStatusObject: any = sodukuState(newState, row, coloumn);
+      console.log('handleChange', sodukuStatusObject, newState);
+      if (sodukuStatusObject.status === false) {
+        const postions =
+          sodukuStatusObject.row + '' + sodukuStatusObject.coloumn;
+        this.setState({ error: postions });
+      } else if (
+        sodukuStatusObject.status === false &&
+        sodukuStatusObject.completed === true
+      ) {
+        this.setState({ error: '' });
+        clearInterval(this.state.tInterval);
+      } else {
+        this.setState({ error: '' });
+      }
+      // this.setState({ error: newState });
+      console.log('newValue', newValue, str);
     }
-    // this.setState({ error: newState });
-    console.log('newValue', newValue, str);
   };
   public renderColoums = (props: any) => {
     const singleRowObject: any[] = [];
