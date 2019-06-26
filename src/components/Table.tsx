@@ -36,11 +36,13 @@ class CustomTable extends React.Component<
   public onKeyDown(e: any) {
     if (e.keyCode === 8 && this.state.chancesRemaining >= 0) {
       const chancesRemaining: number = this.state.chancesRemaining - 1;
-      if (chancesRemaining < 0) {
-        this.setState({ message: 'Game Over' });
-        clearInterval(this.state.tInterval);
+      if (this.state.error !== '') {
+        if (chancesRemaining < 0) {
+          this.setState({ message: 'Game Over' });
+          clearInterval(this.state.tInterval);
+        }
+        this.setState({ chancesRemaining });
       }
-      this.setState({ chancesRemaining });
     }
   }
   public handleChange = (
