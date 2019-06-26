@@ -1,5 +1,7 @@
-import { array } from 'prop-types';
-
+interface InitialIndexObject {
+  row: number;
+  coloumn: number;
+}
 export const getRandomInt = (max: number): number => {
   return Math.floor(Math.random() * Math.floor(max));
 };
@@ -7,58 +9,27 @@ export const randomise = (frequency: number): any[][] => {
   const matrix = new Array(9).fill(0).map(() => {
     return new Array(9).fill('');
   });
-  // let temp: any;
-  // return matrix;
-  console.log('matrix', matrix);
-  // const i = 1;
-  // while (i <= frequency) {
   for (let i = 1; i <= frequency; i++) {
     const row = getRandomInt(8);
     const coloumn = getRandomInt(8);
     const value = getRandomInt(8);
     matrix[row][coloumn] = value;
-    // const temp: any[][] = [...matrix];
-    // temp = Object.assign([], matrix);
-    // temp[row][coloumn] = value;
     const checkState: any = sodukuState(matrix, row, coloumn);
-    console.log('checkStateinsertion', row, coloumn, value);
     if (checkState.status === false) {
       if (matrix[row][coloumn] !== '') {
         matrix[row][coloumn] = '';
       }
     }
-    // matrix[row][coloumn] = value;
   }
   return matrix;
 };
 
-interface InitialIndexObject {
-  row: number;
-  coloumn: number;
-}
-interface SodukuStateObject {
-  status: number;
-  row: number;
-  coloumn: number;
-}
-// export const sodukuState = (matrix: number[][]): object => {
-//   for (let i = 0; i < matrix.length; i++) {
-//     for (let j = 0; j < matrix[i].length; j++) {}
-//   }
-//   // for (const index of matrix) {
-//   //   for (const i of index) {
-//   //     console.log(i);
-//   //   }
-//   // }
-//   return matrix;
-// };
 export const sodukuState = (
   matrix: number[][],
   insertedIndexRow: number,
   insertedIndexColoumn: number,
 ): any => {
   const value: number = matrix[insertedIndexRow][insertedIndexColoumn];
-  const containerArray: number[][] = [];
   const initialIndex: InitialIndexObject = getInitialIndex(
     insertedIndexRow,
     insertedIndexColoumn,
@@ -73,33 +44,26 @@ export const sodukuState = (
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  console.log('fff-statusSmallerGrid', statusSmallerGrid);
   if (statusSmallerGrid.status === false) {
     return { ...statusSmallerGrid, completed: false };
   }
   const statusCheckRow: any = checkRowOrColoumnStatus(
     matrix,
-    startingIndexRow,
-    startingIndexColoumn,
     'row',
     value,
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  console.log('fff-statusCheckRow', statusCheckRow);
   if (statusCheckRow.status === false) {
     return { ...statusCheckRow, completed: false };
   }
   const statusCheckColoumn: any = checkRowOrColoumnStatus(
     matrix,
-    startingIndexRow,
-    startingIndexColoumn,
     'coloumn',
     value,
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  console.log('fff-statusCheckColoumn', statusCheckColoumn);
 
   if (statusCheckColoumn.status === false) {
     return { ...statusCheckColoumn, completed: false };
@@ -109,7 +73,6 @@ export const sodukuState = (
       return { status: true, completed: true };
     }
     return { status: true, completed: false };
-    console.log('fff-statusCompleted', matrix, value, statusSearchMatrix);
   }
 };
 export const checkSmallerGrid = (
@@ -122,36 +85,16 @@ export const checkSmallerGrid = (
 ) => {
   const len: number = startingIndexRow + 3;
   const len1: number = startingIndexColoumn + 3;
-  console.log(
-    'hehehehhe',
-    matrix,
-    startingIndexRow,
-    startingIndexColoumn,
-    value,
-    insertedIndexRow,
-    insertedIndexColoumn,
-  );
-  // const frequency: any = {};
+
   let status: boolean = true;
   for (let row = startingIndexRow; row < len; row++) {
     for (let coloumn = startingIndexColoumn; coloumn < len1; coloumn++) {
-      // const value1: any = matrix[row][coloumn];
       if (row === insertedIndexRow && coloumn === insertedIndexColoumn) {
         continue;
       } else if (value === matrix[row][coloumn]) {
         status = false;
         return { status, row, coloumn };
       }
-      // if (frequency[value] !== undefined) {
-      //   frequency[value].count++;
-      //   frequency[value].positions.push(i + '' + j);
-      //   status = false;
-      // } else {
-      //   frequency[value] = {};
-      //   frequency[value].count = 1;
-      //   frequency[value].positions = [];
-      //   frequency[value].positions.push(i + '' + j);
-      // }
     }
   }
   return { status };
@@ -191,18 +134,13 @@ export const getInitialIndex = (
 };
 export const checkRowOrColoumnStatus = (
   matrix: number[][],
-  startingIndexRow: number,
-  startingIndexColoumn: number,
   piviot: string = 'row',
   searchValue: number,
   insertedIndexRow: number,
   insertedIndexColoumn: number,
 ): any => {
   let status: boolean = true;
-  const statusCompleted: boolean = false;
-  const frequency: any = {};
-
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < matrix.length; i++) {
     let value: any;
     if (piviot === 'row') {
       if (i === insertedIndexColoumn) {
@@ -213,7 +151,6 @@ export const checkRowOrColoumnStatus = (
       if (i === insertedIndexRow) {
         continue;
       }
-      console.log('ffff', insertedIndexColoumn);
       value = matrix[i][insertedIndexColoumn];
     }
     if (searchValue === value) {
@@ -235,31 +172,16 @@ export const getSodukuTime = (startTime: number): string => {
   let difference: number;
   updatedTime = new Date().getTime();
   difference = updatedTime - startTime;
-  // if (savedTime) {
-  //   difference = updatedTime - startTime + savedTime;
-  // } else {
-  //   difference = updatedTime - startTime;
-  // }
-  // var days = Math.floor(difference / (1000 * 60 * 60 * 24));
   let hours: any = Math.floor(
     (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
   );
   let minutes: any = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
   let seconds: any = Math.floor((difference % (1000 * 60)) / 1000);
-  // let milliseconds: any = Math.floor((difference % (1000 * 60)) / 100);
   hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
   seconds = seconds < 10 ? '0' + seconds : seconds;
-  // milliseconds =
-  //   milliseconds < 100
-  //     ? milliseconds < 10
-  //       ? '00' + milliseconds
-  //       : '0' + milliseconds
-  //     : milliseconds;
   const displayTime: string = hours + ':' + minutes + ':' + seconds;
-  console.log(displayTime);
   return displayTime;
-  // timerDisplay.innerHTML = hours + ':' + minutes + ':' + seconds + ':' + milliseconds;
 };
 export const searchMatrix = (matrix: number[][], element: any) => {
   let status: boolean = false;

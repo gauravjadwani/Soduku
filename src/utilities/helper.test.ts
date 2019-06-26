@@ -1,4 +1,4 @@
-import { object } from 'prop-types';
+
 import {
   checkRowOrColoumnStatus,
   checkSmallerGrid,
@@ -19,58 +19,46 @@ const matrix: number[][] = [
 // const matrix = new Array(9).fill(0).map(() => {
 //   return new Array(9).fill(0);
 // });
-interface Cus {
-  frequency: {};
-  status: boolean;
-}
-const i: Cus = { frequency: {}, status: true };
-// i = checkRowOrColoumnStatus(arr, 6, 6);
-// // const s: [] = Object.keys(i);
-// // const k: {} = i.(s[0].toString());
-// const l = i.frequency;
-// console.log(l);
-// if (i.hasOwnProperty('frequency')) {
 
-// }
-// console.log(checkSmallerGrid(arr, { i: 0, j: 0 }));
 
-// ----------------------------------------------------
-// const insertedRow: number = 0;
-// const insertedColoumn: number = 2;
-// const initialIndex: string = getInitialIndex(insertedRow, insertedColoumn);
-// const value = matrix[insertedRow][insertedColoumn];
-// const startingIndexRow: number = parseInt(initialIndex, 10) / 10;
-// const startingIndexColoumn: number = parseInt(initialIndex, 10) % 10;
-// const statusSmallerGrid: object = checkSmallerGrid(
-//   matrix,
-//   startingIndexRow,
-//   startingIndexColoumn,
-//   value,
-//   insertedRow,
-//   insertedColoumn,
-// );
-// console.log('statusSmallerGrid', statusSmallerGrid);
-// const statusCheckRow: object = checkRowOrColoumnStatus(
-//   matrix,
-//   startingIndexRow,
-//   startingIndexColoumn,
-//   'row',
-//   value,
-//   insertedRow,
-//   insertedColoumn,
-// );
-// console.log('statusCheckRow', statusCheckRow);
-// const statusCheckColoumn: object = checkRowOrColoumnStatus(
-//   matrix,
-//   0,
-//   2,
-//   'coloumn',
-//   value,
-//   insertedRow,
-//   insertedColoumn,
-// );
-// console.log('statusCheckColoumn', statusCheckColoumn);
+
+----------------------------------------------------
+const insertedRow: number = 0;
+const insertedColoumn: number = 2;
+const initialIndex: string = getInitialIndex(insertedRow, insertedColoumn);
+const value = matrix[insertedRow][insertedColoumn];
+const startingIndexRow: number = parseInt(initialIndex, 10) / 10;
+const startingIndexColoumn: number = parseInt(initialIndex, 10) % 10;
+const statusSmallerGrid: object = checkSmallerGrid(
+  matrix,
+  startingIndexRow,
+  startingIndexColoumn,
+  value,
+  insertedRow,
+  insertedColoumn,
+);
+console.log('statusSmallerGrid', statusSmallerGrid);
+const statusCheckRow: object = checkRowOrColoumnStatus(
+  matrix,
+  startingIndexRow,
+  startingIndexColoumn,
+  'row',
+  value,
+  insertedRow,
+  insertedColoumn,
+);
+console.log('statusCheckRow', statusCheckRow);
+const statusCheckColoumn: object = checkRowOrColoumnStatus(
+  matrix,
+  0,
+  2,
+  'coloumn',
+  value,
+  insertedRow,
+  insertedColoumn,
+);
+console.log('statusCheckColoumn', statusCheckColoumn);
 
 // ---------------------------------------------------------------------------//
 const sodukuStatusObject: any = sodukuState(matrix, 8, 8);
-console.log('dean', sodukuStatusObject);
+console.log('values', sodukuStatusObject);
