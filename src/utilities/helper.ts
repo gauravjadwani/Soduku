@@ -1,184 +1,199 @@
-import { array } from 'prop-types';
-
-export const randomise = (): number[][] => {
-  // let array:numbers=[][];
-
-  const matrix: number[][] = new Array(9)
-    .fill(0)
-    .map(() => new Array(9).fill(0));
+interface InitialIndexObject {
+  row: number;
+  coloumn: number;
+}
+export const getRandomInt = (max: number): number => {
+  return Math.floor(Math.random() * Math.floor(max));
+};
+export const randomise = (frequency: number): any[][] => {
+  const matrix = new Array(9).fill(0).map(() => {
+    return new Array(9).fill('');
+  });
+  for (let i = 1; i <= frequency; i++) {
+    const row = getRandomInt(8);
+    const coloumn = getRandomInt(8);
+    const value = getRandomInt(8);
+    matrix[row][coloumn] = value;
+    const checkState: any = sodukuState(matrix, row, coloumn);
+    if (checkState.status === false) {
+      if (matrix[row][coloumn] !== '') {
+        matrix[row][coloumn] = '';
+      }
+    }
+  }
   return matrix;
 };
-interface StateObject {
-  check: boolean;
-  martrix: Array<[]>;
-}
-// export const sodukuState = (matrix: number[][]): object => {
-//   for (let i = 0; i < matrix.length; i++) {
-//     for (let j = 0; j < matrix[i].length; j++) {}
-//   }
-//   // for (const index of matrix) {
-//   //   for (const i of index) {
-//   //     console.log(i);
-//   //   }
-//   // }
-//   return matrix;
-// };
+
 export const sodukuState = (
   matrix: number[][],
   insertedIndexRow: number,
   insertedIndexColoumn: number,
-): void => {
-  // const row: number = parseInt(insertedIndex / 10 + '', 10);
-  // const coloumn: number = parseInt((insertedIndex % 10) + '', 10);
-  // const str: string = (insertedIndex + '').split('');
-  // const i: number = parseInt(str[0], 10);
-  // const j: number = parseInt(str[1], 10);
-  const containerArray: number[][] = [];
-  const initialIndex: string = getInitialIndex(
+): any => {
+  const value: number = matrix[insertedIndexRow][insertedIndexColoumn];
+  const initialIndex: InitialIndexObject = getInitialIndex(
     insertedIndexRow,
     insertedIndexColoumn,
   );
-  const startingIndexRow: number = parseInt(initialIndex, 10) / 10;
-  const startingIndexColoumn: number = parseInt(initialIndex, 10) % 10;
-  const statusSmallerGrid: object = checkSmallerGrid(
+  const startingIndexRow: number = initialIndex.row;
+  const startingIndexColoumn: number = initialIndex.coloumn;
+  const statusSmallerGrid: any = checkSmallerGrid(
     matrix,
     startingIndexRow,
     startingIndexColoumn,
-  );
-  const statusCheckRow: object = checkRowOrColoumnStatus(
-    matrix,
-    startingIndexRow,
-    startingIndexColoumn,
-  );
-  const statusCheckColoumn: object = checkRowOrColoumnStatus(
-    matrix,
+    value,
     insertedIndexRow,
     insertedIndexColoumn,
+  );
+  if (statusSmallerGrid.status === false) {
+    return { ...statusSmallerGrid, completed: false };
+  }
+  const statusCheckRow: any = checkRowOrColoumnStatus(
+    matrix,
+    'row',
+    value,
+    insertedIndexRow,
+    insertedIndexColoumn,
+  );
+  if (statusCheckRow.status === false) {
+    return { ...statusCheckRow, completed: false };
+  }
+  const statusCheckColoumn: any = checkRowOrColoumnStatus(
+    matrix,
     'coloumn',
+    value,
+    insertedIndexRow,
+    insertedIndexColoumn,
   );
-  // for (let i = 0; i < matrix.length; i++) {
-  //   for (let j = 0; j < matrix[i].length; j++) {}
-  // }
+
+  if (statusCheckColoumn.status === false) {
+    return { ...statusCheckColoumn, completed: false };
+  } else {
+    const statusSearchMatrix: any = searchMatrix(matrix, '');
+    if (statusSearchMatrix.status === false) {
+      return { status: true, completed: true };
+    }
+    return { status: true, completed: false };
+  }
 };
-// export const checkHorizontalAndVerticalStatus = (
-//   matrix: number[][],
-//   row: number,
-//   coloumn: number,
-// ): object => {
-//   const frequency: any = {};
-//   let status: boolean = true;
-//   for (let j = 0; j < 9; j++) {
-//     const value: any = matrix[row][j].toString();
-//     if (value === '') {
-//       status = false;
-//       break;
-//     } else if (frequency.hasOwnProperty(value)) {
-//       const str: string = frequency[value];
-//       frequency.value.count++;
-//       frequency[value].positions.push(row + '' + j);
-//       status = false;
-//     } else {
-//       frequency[value] = {};
-//       frequency[value].count = 1;
-//       frequency[value].positions = [];
-//       frequency[value].positions.push(row + '' + j);
-//     }
-//   }
-//   return { frequency, status };
-// };
 export const checkSmallerGrid = (
   matrix: number[][],
   startingIndexRow: number,
   startingIndexColoumn: number,
+  value: number,
+  insertedIndexRow: number,
+  insertedIndexColoumn: number,
 ) => {
   const len: number = startingIndexRow + 3;
   const len1: number = startingIndexColoumn + 3;
-  const frequency: any = {};
+
   let status: boolean = true;
-  for (let i = startingIndexRow; i < len; i++) {
-    for (let j = startingIndexColoumn; j < len1; j++) {
-      const value: any = matrix[i][j];
-      if (frequency[value] !== undefined) {
-        frequency[value].count++;
-        frequency[value].positions.push(i + '' + j);
+  for (let row = startingIndexRow; row < len; row++) {
+    for (let coloumn = startingIndexColoumn; coloumn < len1; coloumn++) {
+      if (row === insertedIndexRow && coloumn === insertedIndexColoumn) {
+        continue;
+      } else if (value === matrix[row][coloumn]) {
         status = false;
-      } else {
-        frequency[value] = {};
-        frequency[value].count = 1;
-        frequency[value].positions = [];
-        frequency[value].positions.push(i + '' + j);
+        return { status, row, coloumn };
       }
     }
   }
-  return { frequency, status };
+  return { status };
 };
 
 export const getInitialIndex = (
   insertedIndexRow: number,
   insertedIndexColoumn: number,
-): string => {
-  let initialIndex: string = '';
+): InitialIndexObject => {
+  let initialIndex: InitialIndexObject;
   if (insertedIndexRow < 3) {
     if (insertedIndexColoumn < 3) {
-      initialIndex = '00';
+      initialIndex = { row: 0, coloumn: 0 };
     } else if (insertedIndexColoumn > 2 && insertedIndexColoumn < 6) {
-      initialIndex = '03';
+      initialIndex = { row: 0, coloumn: 3 };
     } else {
-      initialIndex = '06';
+      initialIndex = { row: 0, coloumn: 6 };
     }
   } else if (insertedIndexRow > 2 && insertedIndexRow < 6) {
     if (insertedIndexColoumn < 3) {
-      initialIndex = '30';
+      initialIndex = { row: 3, coloumn: 0 };
     } else if (insertedIndexColoumn > 2 && insertedIndexColoumn < 6) {
-      initialIndex = '33';
+      initialIndex = { row: 3, coloumn: 3 };
     } else {
-      initialIndex = '36';
+      initialIndex = { row: 3, coloumn: 6 };
     }
   } else {
     if (insertedIndexColoumn < 3) {
-      initialIndex = '60';
+      initialIndex = { row: 6, coloumn: 0 };
     } else if (insertedIndexColoumn > 2 && insertedIndexColoumn < 6) {
-      initialIndex = '63';
+      initialIndex = { row: 6, coloumn: 3 };
     } else {
-      initialIndex = '66';
+      initialIndex = { row: 6, coloumn: 6 };
     }
   }
   return initialIndex;
 };
 export const checkRowOrColoumnStatus = (
   matrix: number[][],
-  startingIndexRow: number,
-  startingIndexColoumn: number,
   piviot: string = 'row',
+  searchValue: number,
+  insertedIndexRow: number,
+  insertedIndexColoumn: number,
 ): any => {
   let status: boolean = true;
-  const frequency: any = {};
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < matrix.length; i++) {
     let value: any;
     if (piviot === 'row') {
-      value = matrix[startingIndexRow][i];
+      if (i === insertedIndexColoumn) {
+        continue;
+      }
+      value = matrix[insertedIndexRow][i];
     } else {
-      value = matrix[i][startingIndexColoumn];
+      if (i === insertedIndexRow) {
+        continue;
+      }
+      value = matrix[i][insertedIndexColoumn];
     }
-    if (value === '') {
+    if (searchValue === value) {
       status = false;
-      break;
-    } else if (frequency[value] !== undefined) {
-      frequency[value].count++;
-      // frequency[value].positions.push(row + '' + j);
-      status = false;
-    } else {
-      frequency[value] = {};
-      frequency[value].count = 1;
-      frequency[value].positions = [];
-      // frequency[value].positions.push(row + '' + j);
-    }
-    if (piviot === 'row') {
-      frequency[value].positions.push(startingIndexRow + '' + i);
-    } else {
-      frequency[value].positions.push(i + '' + startingIndexColoumn);
+      if (piviot === 'row') {
+        const obj = { row: insertedIndexRow, coloumn: i };
+        return { status, ...obj };
+      } else {
+        const obj = { row: i, coloumn: insertedIndexColoumn };
+        return { status, ...obj };
+      }
     }
   }
-  return { frequency, status };
+  return { status };
 };
 // sodukuState([[1, 2], [2, 8]]);
+export const getSodukuTime = (startTime: number): string => {
+  let updatedTime: number;
+  let difference: number;
+  updatedTime = new Date().getTime();
+  difference = updatedTime - startTime;
+  let hours: any = Math.floor(
+    (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+  );
+  let minutes: any = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds: any = Math.floor((difference % (1000 * 60)) / 1000);
+  hours = hours < 10 ? '0' + hours : hours;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+  const displayTime: string = hours + ':' + minutes + ':' + seconds;
+  return displayTime;
+};
+export const searchMatrix = (matrix: number[][], element: any) => {
+  let status: boolean = false;
+  // tslint:disable-next-line:prefer-for-of
+  for (let row: number = 0; row < matrix.length; row++) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let coloumn: number = 0; coloumn < matrix[row].length; coloumn++) {
+      if (matrix[row][coloumn] === element) {
+        status = true;
+        return status;
+      }
+    }
+  }
+  return status;
+};
