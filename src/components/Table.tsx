@@ -38,6 +38,7 @@ class CustomTable extends React.Component<
       const chancesRemaining: number = this.state.chancesRemaining - 1;
       if (chancesRemaining < 0) {
         this.setState({ message: 'Game Over' });
+        clearInterval(this.state.tInterval);
       }
       this.setState({ chancesRemaining });
     }
