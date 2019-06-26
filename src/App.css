@@ -31,3 +31,71 @@
     transform: rotate(360deg);
   }
 }
+
+.TableInput{
+  align-content: center !important;
+}
+.FlexColoumnContainer {
+  display: flex;
+  flex-direction: row;
+  /* width: auto; */
+
+
+  /* width: 0px; */
+  /* height: 0px; */
+  /* background-color: DodgerBlue; */
+}
+.FlexColoumnContainer > div{
+  /* display: inline-block; */
+  /* display: inline-block; */
+}
+
+.FlexColoumnContainer > div > input {
+  background-color: #f1f1f1;
+  margin: 5px;
+  padding: 10px;
+  font-size: 15px;
+  width: 25px;
+  height: 25px;
+}
+.MainContainer{
+  position: absolute;
+  left:50vh;
+  top:20vh;
+  /* margin-left: 70vh; */
+  /* margin-top: 30vh; */
+  border: 2px solid black;
+  /* display: flex; */
+  /* flex-direction: row; */
+}
+.FlexColoumnContainer{
+  /* border: 10px solid red; */
+}
+#myText{
+  /* border:none;
+  background: transparent;
+  outline: 0;
+  width: inherit;
+  height: inherit;
+  padding: 0px; */
+  /* font-size: 15px; */
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+div.Row-2,div.Row-5{
+  border-bottom: 2px solid black;
+}
+div.Coloumn-2,div.Coloumn-5{
+  border-right: 2px solid black;
+}
+.Red{
+  border: 2px solid red;
+}
+/* .sp{
+  border: 10px solid pink;
+} */

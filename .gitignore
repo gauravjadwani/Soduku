@@ -1,10 +1,13 @@
-<<<<<<< HEAD
+# Build and Release Folders
+bin-debug/
+bin-release/
+
+=======
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
+
 
 # testing
 /coverage
@@ -22,23 +25,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-=======
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
-
-# Other files and folders
-.settings/
-
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
->>>>>>> 6c35e391b36a8ca028e300b3384c4bd3cb946a2a
