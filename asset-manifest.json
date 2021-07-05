@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/Soduko/static/css/main.d8708388.chunk.css",
-    "main.js": "/Soduko/static/js/main.e7a92748.chunk.js",
-    "main.js.map": "/Soduko/static/js/main.e7a92748.chunk.js.map",
-    "runtime-main.js": "/Soduko/static/js/runtime-main.90fc475a.js",
-    "runtime-main.js.map": "/Soduko/static/js/runtime-main.90fc475a.js.map",
-    "static/js/2.dbce3bd7.chunk.js": "/Soduko/static/js/2.dbce3bd7.chunk.js",
-    "static/js/2.dbce3bd7.chunk.js.map": "/Soduko/static/js/2.dbce3bd7.chunk.js.map",
-    "index.html": "/Soduko/index.html",
-    "static/css/main.d8708388.chunk.css.map": "/Soduko/static/css/main.d8708388.chunk.css.map",
-    "static/js/2.dbce3bd7.chunk.js.LICENSE.txt": "/Soduko/static/js/2.dbce3bd7.chunk.js.LICENSE.txt"
+    "main.css": "/Soduku/static/css/main.d8708388.chunk.css",
+    "main.js": "/Soduku/static/js/main.e7a92748.chunk.js",
+    "main.js.map": "/Soduku/static/js/main.e7a92748.chunk.js.map",
+    "runtime-main.js": "/Soduku/static/js/runtime-main.e7279589.js",
+    "runtime-main.js.map": "/Soduku/static/js/runtime-main.e7279589.js.map",
+    "static/js/2.dbce3bd7.chunk.js": "/Soduku/static/js/2.dbce3bd7.chunk.js",
+    "static/js/2.dbce3bd7.chunk.js.map": "/Soduku/static/js/2.dbce3bd7.chunk.js.map",
+    "index.html": "/Soduku/index.html",
+    "static/css/main.d8708388.chunk.css.map": "/Soduku/static/css/main.d8708388.chunk.css.map",
+    "static/js/2.dbce3bd7.chunk.js.LICENSE.txt": "/Soduku/static/js/2.dbce3bd7.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.90fc475a.js",
+    "static/js/runtime-main.e7279589.js",
     "static/js/2.dbce3bd7.chunk.js",
     "static/css/main.d8708388.chunk.css",
     "static/js/main.e7a92748.chunk.js"
