@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Soduko/static/css/main.0abdea0e.chunk.css",
+    "main.js": "/Soduko/static/js/main.14fd9a15.chunk.js",
+    "main.js.map": "/Soduko/static/js/main.14fd9a15.chunk.js.map",
+    "runtime~main.js": "/Soduko/static/js/runtime~main.4fb96c79.js",
+    "runtime~main.js.map": "/Soduko/static/js/runtime~main.4fb96c79.js.map",
+    "static/js/2.09aed800.chunk.js": "/Soduko/static/js/2.09aed800.chunk.js",
+    "static/js/2.09aed800.chunk.js.map": "/Soduko/static/js/2.09aed800.chunk.js.map",
+    "index.html": "/Soduko/index.html",
+    "precache-manifest.b79326852d199d54326e746d389a0bac.js": "/Soduko/precache-manifest.b79326852d199d54326e746d389a0bac.js",
+    "service-worker.js": "/Soduko/service-worker.js",
+    "static/css/main.0abdea0e.chunk.css.map": "/Soduko/static/css/main.0abdea0e.chunk.css.map"
+  }
+}
